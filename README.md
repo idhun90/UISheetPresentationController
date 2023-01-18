@@ -2,6 +2,7 @@
 
 ## 업데이트 내역
 - 2023.01.18 - animateChanges, selectedDetentIdentifier를 활용하여 두 버튼을 Tap했을 때 sheet detent값 변경
+***
 
 지도 앱을 실행하면 화면 하단에 검색, 즐겨찾기, 최근 항목 등을 볼 수 있는 **Bottom Sheet**가 있다. Bottom Sheet는 위로 드래그하면 유동적으로 Sheet 크기가 변하는데, **UISheetPresentationController** 클래스를 통해 구현할 수 있다.
 
@@ -127,7 +128,7 @@ prefersScrollingExpandsWhenScrolledToEdge 프로퍼티 **기본값은 true**이�
 
 - large detent로 확장 가능한 상태에서 sheet를 위로 드래그했을 때 먼저 large detent로 확장된 후 테이블뷰 스크롤이 가능한 것을 확인할 수 있다.
 
-### false 일 떄
+### false 일 때
 
 ![prefersScrollingExpandsWhenScrolledToEdge = false](https://user-images.githubusercontent.com/51053410/212864774-c63410fd-a91a-4910-9a9e-5f887f97d431.gif)
 
