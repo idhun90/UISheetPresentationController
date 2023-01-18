@@ -1,4 +1,8 @@
 # UISheetPresentationController
+
+## 업데이트 내역
+- 2023.01.18 - animateChanges, selectedDetentIdentifier를 활용하여 두 버튼을 Tap했을 때 sheet detent값 변경
+
 지도 앱을 실행하면 화면 하단에 검색, 즐겨찾기, 최근 항목 등을 볼 수 있는 **Bottom Sheet**가 있다. Bottom Sheet는 위로 드래그하면 유동적으로 Sheet 크기가 변하는데, **UISheetPresentationController** 클래스를 통해 구현할 수 있다.
 
 ## 구조
@@ -153,3 +157,57 @@ widthFollowsPreferredContentSizeWhenEdgeAttached 프로퍼티는 sheet의 width�
 - **true**일 때 **view controller의 width 값을 `preferredContentSize`를 사용하여 결정**할 수 있다.
 
 > compact-width, regular-height size class 또는 prefersEdgeAttachedInCompactHeight 값이 false 일 때 적용되지 않는다.
+
+## 프로그래밍 방식으로 sheet 높이 조절
+
+NavigationBar에 버튼 두 개를 만들고, 각 버튼을 탭했을 때 sheet 높이가 변화시킬 수 있다. 
+
+- `animateChanges(_:)` 메소드 및 `selectedDententIdentifier` 프로퍼티 활용
+    - **`animateChanges(_:)` 메소드.** 
+        - **sheet 속성을 변경**할 때, **애니메이션도 함께 적용**하기 위해 해다 메소드 클로저 내부에 속성 변경 코드를 작성
+    - **`selectedDententIdentifier` 프로퍼티.**
+        - 사용자가 선택하거나 프로그래밍 방식으로 설정한 가장 최근 detent를 나타내는 프로퍼티
+        - 기본값은 nil이다. sheet가 가장 작은 detent를 표시함을 의미한다.
+
+```swift
+override func viewDidLoad() {
+    setupBarButtonItems()
+    setupSheetPresentationController()
+}
+
+private func setupBarButtonItems() {
+    let rightButton = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(dismissView))
+    let mediumButton = UIBarButtonItem(image: UIImage(systemName: "m.circle"), style: .plain, target: self, action: #selector(setMedium))
+    let largeButton = UIBarButtonItem(image: UIImage(systemName: "l.circle"), style: .done, target: self, action: #selector(setLarge))
+    navigationItem.rightBarButtonItems = [rightButton, largeButton, mediumButton]
+}
+
+private func setupSheetPresentationController() {
+    if let sheet = sheetPresentationController {
+        sheet.detents = [.medium(), .large()]
+        sheet.prefersGrabberVisible = true
+        sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+        sheet.prefersEdgeAttachedInCompactHeight = true
+        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+    }
+}
+
+@objc private func setMedium() {
+    if let sheet = sheetPresentationController {
+        sheet.animateChanges {
+            sheet.selectedDetentIdentifier = .medium
+        }
+    }
+}
+
+@objc private func setLarge() {
+    if let sheet = sheetPresentationController {
+        sheet.animateChanges {
+            sheet.selectedDetentIdentifier = .large
+        }
+    }
+}
+```
+
+![animateChanges selectedDetentIdentifier](https://user-images.githubusercontent.com/51053410/213129972-731fcd63-6347-4adc-838b-36709cf1a0ea.gif)
+
