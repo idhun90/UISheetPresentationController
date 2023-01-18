@@ -41,7 +41,7 @@ final class SecondViewController: BaseViewController {
         }
     }
     
-    @objc func setMedium() {
+    @objc private func setMedium() {
         if let sheet = sheetPresentationController {
             sheet.animateChanges {
                 sheet.selectedDetentIdentifier = .medium
@@ -49,7 +49,7 @@ final class SecondViewController: BaseViewController {
         }
     }
     
-    @objc func setLarge() {
+    @objc private func setLarge() {
         if let sheet = sheetPresentationController {
             sheet.animateChanges {
                 sheet.selectedDetentIdentifier = .large
