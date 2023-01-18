@@ -20,12 +20,44 @@ final class SecondViewController: BaseViewController {
         mainView.tableView.dataSource = self
         mainView.tableView.delegate = self
         
+        setupBarButtonItems()
+        setupSheetPresentationController()
+    }
+    
+    private func setupBarButtonItems() {
         let rightButton = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(dismissView))
-        navigationItem.rightBarButtonItem = rightButton
+        let mediumButton = UIBarButtonItem(image: UIImage(systemName: "m.circle"), style: .plain, target: self, action: #selector(setMedium))
+        let largeButton = UIBarButtonItem(image: UIImage(systemName: "l.circle"), style: .done, target: self, action: #selector(setLarge))
+        navigationItem.rightBarButtonItems = [rightButton, largeButton, mediumButton]
+    }
+    
+    private func setupSheetPresentationController() {
+        if let sheet = sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        }
+    }
+    
+    @objc func setMedium() {
+        if let sheet = sheetPresentationController {
+            sheet.animateChanges {
+                sheet.selectedDetentIdentifier = .medium
+            }
+        }
+    }
+    
+    @objc func setLarge() {
+        if let sheet = sheetPresentationController {
+            sheet.animateChanges {
+                sheet.selectedDetentIdentifier = .large
+            }
+        }
     }
     
     @objc func dismissView() {
-        
         guard let nvc = presentingViewController as? SheetPresentationController else { return }
         
         dismiss(animated: true) {
